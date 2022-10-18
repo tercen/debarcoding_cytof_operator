@@ -1,9 +1,10 @@
 {
   "name": "CYTOF Debarcoding",
-  "description": ".",
+  "description": "Debarcoding.",
   "tags": ["data preprocessing", "cytof"],
   "authors": ["tercen"],
-  "container":"tercen/debarcoding_cytof_operator:latest",
+  "urls": ["https://github.com/tercen/debarcoding_cytof_operator"],
+  "container":"tercen/debarcoding_cytof_operator:0.0.5",
   "properties": [
     {
       "kind": "DoubleProperty",
