@@ -1,10 +1,16 @@
 {
-  "name": "Template_R_operator",
-  "description": "Calculate the mathematical average of the data points in a cell.",
-  "tags": ["basic statistics"],
+  "name": "CYTOF Debarcoding",
+  "description": ".",
+  "tags": ["data preprocessing", "cytof"],
   "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/template_R_operator"],
-  "properties": []
+  "properties": [
+    {
+      "kind": "DoubleProperty",
+      "name": "Separation Cutoff",
+      "defaultValue": -1,
+      "description": "Separation cutoff use with CATALYST's apply cutoff. Leave it at -1 to use population specific cutoffs."
+    }
+  ]
 }
 
 
