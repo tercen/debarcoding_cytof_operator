@@ -3,6 +3,7 @@
   "description": ".",
   "tags": ["data preprocessing", "cytof"],
   "authors": ["tercen"],
+  "container":"tercen/debarcoding_cytof_operator:latest",
   "properties": [
     {
       "kind": "DoubleProperty",
