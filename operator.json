@@ -4,7 +4,7 @@
   "tags": ["data preprocessing", "cytof"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/debarcoding_cytof_operator"],
-  "container":"tercen/debarcoding_cytof_operator:0.0.5",
+  "container":"tercen/debarcoding_cytof_operator:latest",
   "properties": [
     {
       "kind": "DoubleProperty",
