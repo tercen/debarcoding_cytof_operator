@@ -1,0 +1,115 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": ".i",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "C3",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "C1",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "A3",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "B4",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "A5",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "C2",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "0",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "B3",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "A1",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "B5",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "D1",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "C5",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "A4",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "D3",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "C4",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "A2",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "D2",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "B1",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "D5",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "D4",
+      "type": "double"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "B2",
+      "type": "double"
+    }
+  ]
+}
