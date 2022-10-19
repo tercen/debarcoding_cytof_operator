@@ -30,15 +30,16 @@ lapply( Sys.glob("tests/*.csv.schema"), function(x) { unlink(x) } )
 wkfId <- "7537973a65f87297878b1dd4e80015bb"
 options("tercen.workflowId"= wkfId)
 
-stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59",
-                "38c67b64-02e0-4b80-8dc4-3994d00cf5ee")
+# stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59",
+#                 "38c67b64-02e0-4b80-8dc4-3994d00cf5ee")
 
+stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59")
 
 # Steps with properties
 propDictList <- list()
-propDictList <- list("SeparationCutoff"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59",
-                                     sepCuttof=0.4),
-                     "Default"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59"))
+# propDictList <- list("SeparationCutoff"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59",
+#                                      sepCuttof=0.4),
+#                      "Default"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59"))
 
 
 for( i in seq(1, length(stepIdList))){
@@ -78,7 +79,7 @@ for( i in seq(1, length(stepIdList))){
                             version = '0.0.1',
                             absTol = 0.001,
                             gen_schema = TRUE,
-                            skipCols=c(),
+                            skipCols=c(".content"),
                             props=setNames(plist,pnames))
       
       
@@ -88,7 +89,7 @@ for( i in seq(1, length(stepIdList))){
     
     tim::build_test_data( res, ctx, paste0(step_name, "_absTol"),
                           version = '0.0.1',
-                          skipCols=c(),
+                          skipCols=c(".content"),
                           gen_schema = TRUE,
                           absTol = 0.001)
   }
