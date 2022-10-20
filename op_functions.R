@@ -138,6 +138,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
   # Output 1: Scaled values per .ci and .ri
   assay_values <- assay( sce, "scaled")
 
+
   chnames <- rownames(sce)
   assay_df <- NULL
 
@@ -149,6 +150,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
     
     tmp_df <- tibble(assay_values[i,], ci_ri)
 
+    
     if(is.null(assay_df)){
       assay_df <- tmp_df
     }else{
@@ -168,28 +170,9 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
   bc_assigns <- sce$bc_id
   barcodes <- unique( bc_assigns )
 
-  barcode_df <- NULL
-  for( bc in barcodes ){
-    bc_flag <- unlist(lapply( bc_assigns, function(x){
-      if( x == bc){
-        1
-      }else{
-        0
-      }
-    }))
+  barcode_df <- cbind( df$.ci, tibble(bc_assigns))
 
-    tmp_df <- tibble( bc_flag )
-    if(is.null(barcode_df)){
-      barcode_df <- tmp_df
-    }else{
-      barcode_df <- cbind( barcode_df, tmp_df )
-    }
-  }
-
-  # barcode_df <- cbind( col_df[".ci"], barcode_df)
-  barcode_df <- cbind( df$.ci, barcode_df)
-
-  names(barcode_df) <- append( ".i", barcodes)
+  names(barcode_df) <- append( ".i", "Barcodes")
 
   # END of output 2 -> barcode_df
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
