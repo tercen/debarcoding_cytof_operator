@@ -1,0 +1,22 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "DebarcodingSubSet_absTol",
+  "namespace": "ds4",
+  "inputDataUri": "DebarcodingSubSet_absTol_in.csv",
+  "outputDataUri": ["DebarcodingSubSet_absTol_out_1.csv", "DebarcodingSubSet_absTol_out_2.csv", "DebarcodingSubSet_absTol_out_3.csv"],
+  "columns": [
+    "filename",
+    "rowId"
+  ],
+  "rows": ["gs2.variable"],
+  "colors": [],
+  "labels": [
+    "js2.documentId"
+  ],
+  "yAxis": "y_values",
+  "xAxis": "",
+  "generatedOn": "10/24/2022 04:10:17 PM 2022",
+  "version": "0.0.2",
+  "skipColumns": [".content", ".i", ".r", "filename"],
+  "absTol": 0.001
+}
