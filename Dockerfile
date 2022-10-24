@@ -1,6 +1,6 @@
 FROM tercen/runtime-flowsuite:3.15-4
 
-RUN R -e "install.packages(c('imager', 'stringr', 'gridExtra'))"
+RUN R -e "install.packages(c('imager', 'stringr', 'gridExtra', 'stringi', 'dplyr'))"
 
 COPY . /operator
 WORKDIR /operator
