@@ -15,8 +15,8 @@
   ],
   "yAxis": "y_values",
   "xAxis": "",
-  "generatedOn": "10/24/2022 04:10:17 PM 2022",
+  "generatedOn": "10/24/2022 05:40:53 PM 2022",
   "version": "0.0.2",
-  "skipColumns": [".content", ".i", ".r", "filename"],
+  "skipColumns": [".content"],
   "absTol": 0.001
 }
