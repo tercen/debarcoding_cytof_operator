@@ -7,7 +7,7 @@ debarcoding_op <- function( ctx, sepCuttof=-1 ){
   filename = tempfile()
   writeBin(ctx$client$fileService$download(docId), filename)
   sample_key <- read.csv(filename)
-  unlink(filename)
+  on.exit(unlink(filename))
   
   
   sk_dm <- data.matrix(sample_key[ , seq(2, ncol(sample_key))])
