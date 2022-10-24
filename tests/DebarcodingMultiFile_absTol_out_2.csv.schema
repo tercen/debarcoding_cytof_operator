@@ -1,0 +1,15 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": ".i",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "Barcodes",
+      "type": "string"
+    }
+  ]
+}
