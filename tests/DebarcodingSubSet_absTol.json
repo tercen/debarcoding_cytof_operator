@@ -11,10 +11,11 @@
   "rows": ["gs2.variable"],
   "colors": [],
   "labels": [
-    "documentId"
+    "js2.documentId"
   ],
   "yAxis": "y_values",
   "xAxis": "",
+  "inputFileUris": ["CATALYST_debarcoding_example_small"],
   "generatedOn": "10/25/2022 11:35:26 AM 2022",
   "version": "0.0.2",
   "skipColumns": [".content", "filename"],
