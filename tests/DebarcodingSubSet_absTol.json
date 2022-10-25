@@ -3,7 +3,7 @@
   "name": "DebarcodingSubSet_absTol",
   "namespace": "ds4",
   "inputDataUri": "DebarcodingSubSet_absTol_in.csv",
-  "outputDataUri": ["DebarcodingSubSet_absTol_out_1.csv", "DebarcodingSubSet_absTol_out_2.csv", "DebarcodingSubSet_absTol_out_3.csv"],
+  "outputDataUri": ["DebarcodingSubSet_absTol_out_1.csv", "DebarcodingSubSet_absTol_out_2.csv", "DebarcodingSubSet_absTol_out_3.csv", "DebarcodingSubSet_absTol_out_4.csv", "DebarcodingSubSet_absTol_out_5.csv"],
   "columns": [
     "filename",
     "rowId"
@@ -15,9 +15,11 @@
   ],
   "yAxis": "y_values",
   "xAxis": "",
-  "inputFileUris": ["sample_key.csv"],
-  "generatedOn": "10/25/2022 11:35:26 AM 2022",
+  "generatedOn": "10/25/2022 04:23:55 PM 2022",
   "version": "0.0.2",
   "skipColumns": [".content", "filename"],
+  "inputFileUris": {
+    "js2.documentId": ["7537973a65f87297878b1dd4e800c1ec"]
+  },
   "absTol": 0.001
 }

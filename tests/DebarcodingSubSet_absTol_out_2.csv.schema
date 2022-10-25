@@ -3,13 +3,13 @@
   "columns": [
     {
       "kind": "ColumnSchema",
-      "name": ".i",
-      "type": "int32"
+      "name": "filename",
+      "type": "string"
     },
     {
       "kind": "ColumnSchema",
-      "name": "Barcodes",
-      "type": "string"
+      "name": "rowId",
+      "type": "int32"
     }
   ]
 }

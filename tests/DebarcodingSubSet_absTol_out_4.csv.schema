@@ -3,7 +3,12 @@
   "columns": [
     {
       "kind": "ColumnSchema",
-      "name": "gs2.variable",
+      "name": ".i",
+      "type": "int32"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "Barcodes",
       "type": "string"
     }
   ]

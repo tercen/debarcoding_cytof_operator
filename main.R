@@ -16,12 +16,12 @@ suppressPackageStartupMessages({
 
 
 source("op_functions.R") 
-
+# options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
 # Single file
 # http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/30808f32-dbb1-4c49-9293-ccd2594aba59
 # options("tercen.workflowId" = "7537973a65f87297878b1dd4e80015bb")
 # options("tercen.stepId"     = "2ffba54a-df15-4e73-9fad-4f8bc547072c")
-# options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
+
 # 
 
 # Multi file
@@ -49,10 +49,10 @@ barcode_df <- barcode_df %>%
 assay_df %>%
   ctx$addNamespace() %>%
   as_relation() %>%
-  left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%
   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
+  left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%
   left_join_relation( barcode_df, ".i", ".i" ) %>%
   left_join_relation( img_df, list(), list() ) %>%
-  as_join_operator( append(ctx$rnames, ctx$cnames), append(ctx$rnames, ctx$cnames)) %>%
+  as_join_operator( append(ctx$cnames, ctx$rnames), append(ctx$cnames, ctx$rnames)) %>%
   save_relation(ctx)
 
