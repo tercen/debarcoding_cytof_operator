@@ -11,7 +11,7 @@
   "rows": ["gs2.variable"],
   "colors": [],
   "labels": [
-    "js2.documentId"
+    "documentId"
   ],
   "yAxis": "y_values",
   "xAxis": "",
