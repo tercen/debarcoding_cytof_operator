@@ -1,0 +1,23 @@
+{
+  "kind": "OperatorUnitTest",
+  "name": "DebarcodingMultiFile_absTol",
+  "namespace": "ds2",
+  "inputDataUri": "DebarcodingMultiFile_absTol_in.csv",
+  "outputDataUri": ["DebarcodingMultiFile_absTol_out_1.csv", "DebarcodingMultiFile_absTol_out_2.csv", "DebarcodingMultiFile_absTol_out_3.csv", "DebarcodingMultiFile_absTol_out_4.csv", "DebarcodingMultiFile_absTol_out_5.csv"],
+  "columns": [
+    "filename",
+    "rowId"
+  ],
+  "rows": ["gs1.variable"],
+  "colors": [],
+  "labels": [
+    "js1.documentId"
+  ],
+  "yAxis": "y_values",
+  "xAxis": "",
+  "generatedOn": "10/26/2022 05:17:42 PM 2022",
+  "version": "0.0.2",
+  "skipColumns": [".content", "filename"],
+  "inputFileUris": ["7537973a65f87297878b1dd4e800c1ec"],
+  "absTol": 0.001
+}
