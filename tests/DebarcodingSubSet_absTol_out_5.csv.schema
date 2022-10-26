@@ -3,12 +3,22 @@
   "columns": [
     {
       "kind": "ColumnSchema",
+      "name": "filename",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
       "name": "mimetype",
       "type": "string"
     },
     {
       "kind": "ColumnSchema",
       "name": "checksum",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": ".content",
       "type": "string"
     }
   ]

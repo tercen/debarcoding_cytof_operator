@@ -3,8 +3,13 @@
   "columns": [
     {
       "kind": "ColumnSchema",
+      "name": "filename",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
       "name": "rowId",
-      "type": "int32"
+      "type": "double"
     }
   ]
 }
