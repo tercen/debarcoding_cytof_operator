@@ -1,0 +1,15 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": "mimetype",
+      "type": "string"
+    },
+    {
+      "kind": "ColumnSchema",
+      "name": "checksum",
+      "type": "string"
+    },
+  ]
+}

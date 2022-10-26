@@ -1,0 +1,10 @@
+{
+  "kind": "TableSchema",
+  "columns": [
+    {
+      "kind": "ColumnSchema",
+      "name": "gs2.variable",
+      "type": "string"
+    }
+  ]
+}
