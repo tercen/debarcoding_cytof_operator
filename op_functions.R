@@ -1,4 +1,4 @@
-debarcoding_op <- function( ctx, sepCuttof=-1 ){
+debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   
   docId <- ctx$select( ctx$labels[[1]], nr = 1 ) # Assumes there is only 1 label, and they are all equal
   docId <- docId[[1]]
@@ -52,7 +52,7 @@ debarcoding_op <- function( ctx, sepCuttof=-1 ){
   
   res <- df %>%
     dplyr::group_by(filename) %>%
-    group_map( ~ do.debarcoding(., sk_dm, sepCuttof), .keep=TRUE )
+    group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff), .keep=TRUE )
   
   
   nfiles <- length(res)

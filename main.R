@@ -31,7 +31,7 @@ source("op_functions.R")
 
 ctx = tercenCtx()
 
-cutoff <- ctx$op.value('Separation Cutoff', as.double, -1)
+cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 
 res <- debarcoding_op(ctx, cutoff)
 

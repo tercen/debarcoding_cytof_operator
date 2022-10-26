@@ -8,7 +8,7 @@
   "properties": [
     {
       "kind": "DoubleProperty",
-      "name": "Separation Cutoff",
+      "name": "Separation_Cutoff",
       "defaultValue": -1,
       "description": "Separation cutoff use with CATALYST's apply cutoff. Leave it at -1 to use population specific cutoffs."
     }

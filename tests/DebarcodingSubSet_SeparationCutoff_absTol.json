@@ -15,12 +15,12 @@
   ],
   "yAxis": "y_values",
   "xAxis": "",
-  "generatedOn": "10/26/2022 06:07:35 PM 2022",
+  "generatedOn": "10/26/2022 06:20:54 PM 2022",
   "version": "0.0.2",
   "propertyValues": [
     {
       "kind": "PropertyValue",
-      "name": "sepCuttof",
+      "name": "Separation_Cutoff",
       "value": "0.4"
     }
   ],
