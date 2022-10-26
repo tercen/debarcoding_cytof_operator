@@ -21,7 +21,7 @@
     {
       "kind": "PropertyValue",
       "name": "sepCuttof",
-      "value": 0.4
+      "value": "0.4"
     }
   ],
   "skipColumns": [".content", "filename"],
