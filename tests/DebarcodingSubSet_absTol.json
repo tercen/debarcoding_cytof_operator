@@ -15,11 +15,9 @@
   ],
   "yAxis": "y_values",
   "xAxis": "",
-  "generatedOn": "10/25/2022 04:23:55 PM 2022",
+  "generatedOn": "10/26/2022 01:53:37 PM 2022",
   "version": "0.0.2",
   "skipColumns": [".content", "filename"],
-  "inputFileUris": {
-    "js2.documentId": ["7537973a65f87297878b1dd4e800c1ec"]
-  },
+  "inputFileUris": ["7537973a65f87297878b1dd4e800c1ec"],
   "absTol": 0.001
 }
