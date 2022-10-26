@@ -40,14 +40,12 @@ barcode_df <- res[[2]]
 img_df <- res[[3]]
 
 barcode_df <- barcode_df %>%
-  ctx$addNamespace() %>%
   as_relation() %>%
   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids )
 
 
 # SAVE
 assay_df %>%
-  ctx$addNamespace() %>%
   as_relation() %>%
   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
   left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%

@@ -3,7 +3,7 @@
   "columns": [
     {
       "kind": "ColumnSchema",
-      "name": "Scaled",
+      "name": "ds4.Scaled",
       "type": "double"
     },
     {

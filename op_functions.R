@@ -7,7 +7,7 @@ debarcoding_op <- function( ctx, sepCuttof=-1 ){
   filename = tempfile()
   writeBin(ctx$client$fileService$download(docId), filename)
   sample_key <- read.csv(filename)
-  on.exit(unlink(filename))
+  # on.exit(unlink(filename))
   
   
   sk_dm <- data.matrix(sample_key[ , seq(2, ncol(sample_key))])
@@ -73,8 +73,11 @@ debarcoding_op <- function( ctx, sepCuttof=-1 ){
     }
   }
   
-  
+  assay_df <- assay_df %>%
+    ctx$addNamespace()
 
+  barcode_df <- barcode_df %>%
+    ctx$addNamespace()
   
   return(lst(assay_df, barcode_df, img_df))
 }
