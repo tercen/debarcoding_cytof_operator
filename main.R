@@ -22,7 +22,9 @@ source("op_functions.R")
 # options("tercen.workflowId" = "7537973a65f87297878b1dd4e80015bb")
 # options("tercen.stepId"     = "2ffba54a-df15-4e73-9fad-4f8bc547072c")
 
-# 
+# http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/30808f32-dbb1-4c49-9293-ccd2594aba59
+# options("tercen.workflowId" = "7537973a65f87297878b1dd4e80015bb")
+# options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
 
 # Multi file
 # http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/38c67b64-02e0-4b80-8dc4-3994d00cf5ee

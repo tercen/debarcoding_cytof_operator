@@ -17,18 +17,6 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   
   rownames(sk_dm) <- sample_key[,1]
   
-  
-  # Use this if ZIP files are to be supported
-  # # unzip if archive
-  # if (length(grep(".zip", doc$name)) > 0) {
-  #   tmpdir <- tempfile()
-  #   unzip(filename, exdir = tmpdir)
-  #   f.names <- list.files(tmpdir, full.names = TRUE)
-  # } else {
-  #   f.names <- filename
-  # }
-  
-  
   row_df <- ctx$rselect() %>%
     mutate(.ri = seq(0, ctx$rschema$nRows-1))
   
@@ -173,7 +161,9 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
   bc_assigns <- sce$bc_id
   barcodes <- unique( bc_assigns )
 
-  barcode_df <- cbind( df$.ci, tibble(bc_assigns))
+
+  # Unique per column, removes repetition from rows
+  barcode_df <- cbind( unique(df$.ci), tibble(bc_assigns))
 
   names(barcode_df) <- append( ".i", "Barcodes")
 

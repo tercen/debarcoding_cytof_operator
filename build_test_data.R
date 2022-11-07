@@ -1,6 +1,6 @@
 library(tercen)
 library(dplyr, warn.conflicts = FALSE)
-library(tim)
+# library(tim)
 
 library(stringr)
 
@@ -14,8 +14,9 @@ library(gridExtra)
 library(ggplot2)
 
 library(stringi)
-
+library(tim)
 source('op_functions.R')
+
 
 
 
@@ -27,21 +28,22 @@ lapply( Sys.glob("tests/*.csv.schema"), function(x) { unlink(x) } )
 
 # options("tercen.workflowId" = "7537973a65f87297878b1dd4e80015bb")
 # options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
+#http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/2ffba54a-df15-4e73-9fad-4f8bc547072c
 
 # Test cases
 wkfId <- "7537973a65f87297878b1dd4e80015bb"
 options("tercen.workflowId"= wkfId)
 
-stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59",
-                "38c67b64-02e0-4b80-8dc4-3994d00cf5ee")
+# stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59",
+                # "38c67b64-02e0-4b80-8dc4-3994d00cf5ee")
 
-# stepIdList <- c("30808f32-dbb1-4c49-9293-ccd2594aba59")
+stepIdList <- c("2ffba54a-df15-4e73-9fad-4f8bc547072c")
 
 # Steps with properties
 # propDictList <- list()
-propDictList <- list("SeparationCutoff"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59",
-                                     sepCuttof=0.4),
-                     "Default"=list(stepId="30808f32-dbb1-4c49-9293-ccd2594aba59"))
+propDictList <- list("SeparationCutoff"=list(stepId="2ffba54a-df15-4e73-9fad-4f8bc547072c",
+                                     Separation_Cutoff="0.4"),
+                     "Default"=list(stepId="2ffba54a-df15-4e73-9fad-4f8bc547072c"))
 
 
 for( i in seq(1, length(stepIdList))){
@@ -68,38 +70,40 @@ for( i in seq(1, length(stepIdList))){
       props$stepId <- NULL
       
       plist <- props
+      plist2 <- as.double(props)
       pnames <- unlist(unname(names(props)))
       
       
       step_name_ex <- paste0(step_name, "_", test_suff)
       
       
-      params <- c(ctx, setNames(plist,pnames))
+      params <- c(ctx, setNames(plist2,pnames))
       res <- do.call('debarcoding_op', params )
       
+
       tim::build_test_data( res, ctx, paste0(step_name_ex, "_absTol"),
-                            version = '0.0.1',
+                            version = '0.0.3',
                             absTol = 0.001,
                             gen_schema = TRUE,
-                            skipCols=c(".content"),
+                            skipCols=c(".content", "filename"),
+                            forcejoincol=c(TRUE, FALSE, FALSE),
+                            forcejoinrow=c(TRUE, FALSE, FALSE),
                             props=setNames(plist,pnames))
       
       
     }
   }else{
     res <- debarcoding_op( ctx )
-    
+
     tim::build_test_data( res, ctx, paste0(step_name, "_absTol"),
-                          version = '0.0.1',
-                          skipCols=c(".content"),
+                          version = '0.0.3',
+                          skipCols=c(".content",  "filename"),
                           gen_schema = TRUE,
+                          forcejoincol=c(TRUE, FALSE, FALSE),
+                          forcejoinrow=c(TRUE, FALSE, FALSE),
                           absTol = 0.001)
+    
   }
 }
         
 
-
-# Single file
-# http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/30808f32-dbb1-4c49-9293-ccd2594aba59
-# options("tercen.workflowId" = "7537973a65f87297878b1dd4e80015bb")
-# options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
