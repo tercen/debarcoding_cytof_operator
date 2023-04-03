@@ -28,6 +28,18 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
     left_join(row_df, by=".ri") %>%
     left_join(col_df, by=".ci") 
   
+  row_factor <- names(row_df)
+  
+  # First row factor different from ci.
+  # NOTE, only one row factor allowed
+  for( i in seq(1, length(row_factor))){
+    if( row_factor[i] != ".ci"){
+      row_factor <- row_factor[i]
+      break
+    }
+  }
+  
+
   # Remove column name prefix
   names(df) <- unlist(lapply( names(df), function(x){
     if( str_starts(x, "[.]") ){
@@ -38,9 +50,16 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
     }
   }))
   
-  res <- df %>%
-    dplyr::group_by(filename) %>%
-    group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff), .keep=TRUE )
+  if( "filename" %in% names(df) ){
+    res <- df %>%
+      dplyr::group_by(filename) %>%
+      group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
+  }else{
+    res <- df %>%
+      group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )
+    
+  }
+  
   
   
   nfiles <- length(res)
@@ -70,15 +89,15 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   return(lst(assay_df, barcode_df, img_df))
 }
 
-do.debarcoding <- function( df, sk_dm, sepCuttof ){
+do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
   
   df_ff <- NULL
   
-  data_chans <- unique(unlist(as.list(df$variable)))
+  data_chans <- unique(unlist(as.list(df[row_factor])))
 
   for( chan in data_chans ){
     df_tmp <- df %>%
-      dplyr::filter( variable == chan ) %>%
+      dplyr::filter( !!sym(row_factor) == chan ) %>%
       select(.y)
 
     names(df_tmp) <- c(chan )
@@ -136,7 +155,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
   for( i in seq(1, length(chnames))){
     chname <- chnames[i]
     ci_ri <- df %>%
-                dplyr::filter(variable == chname) %>%
+                dplyr::filter(!!sym(row_factor) == chname) %>%
                 dplyr::select(c(".ci", ".ri"))
     
     tmp_df <- tibble(assay_values[i,], ci_ri)
@@ -175,7 +194,11 @@ do.debarcoding <- function( df, sk_dm, sepCuttof ){
   img_df <- tim::plot_file_to_df(plot_file, filename = plot_file)
   img_df$mimetype <- 'image/png'
   
-  img_df$filename <- df$filename[[1]]
+  if( "filename" %in% names(df)){
+    img_df$filename <- df$filename[[1]]
+  }else{
+    img_df$filename <- "IMG"
+  }
   # END of output 3 -> img_df
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
