@@ -38,6 +38,9 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
       break
     }
   }
+  row_factor <- str_split_fixed(row_factor, "[.]", Inf)
+  row_factor <- row_factor[length(row_factor)]
+
   
 
   # Remove column name prefix
