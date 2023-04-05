@@ -53,18 +53,11 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
     }
   }))
   
-  if( "filename" %in% names(df) ){
-    res <- df %>%
-      dplyr::group_by(filename) %>%
-      group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
-  }else{
-    res <- df %>%
-      group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )
-    
-  }
-  
-  
-  
+  res <- df %>%
+    dplyr::group_by(filename) %>%
+    group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
+
+
   nfiles <- length(res)
   
   
