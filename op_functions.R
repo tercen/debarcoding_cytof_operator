@@ -1,5 +1,5 @@
 debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
-  
+
   docId <- ctx$select( ctx$labels[[1]], nr = 1 ) # Assumes there is only 1 label, and they are all equal
   docId <- docId[[1]]
   doc <- ctx$client$fileService$get(docId)
@@ -52,43 +52,39 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
       return(sp[length(sp)]  )
     }
   }))
-  
-  
+
   res <- df %>%
     dplyr::group_by(filename) %>%
     group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )
-  return(df)   
-  # 
-  # 
-  # nfiles <- length(res)
-  # 
-  # 
-  # assay_df <- NULL
-  # barcode_df <- NULL
-  # img_df <- NULL
-  # for( i in seq(1, nfiles) ){
-  #   if( is.null( assay_df ) ){
-  #     assay_df <- res[[i]]$assay_df
-  #     barcode_df <- res[[i]]$barcode_df
-  #     img_df <- res[[i]]$img_df
-  #   }else{
-  #     assay_df <- rbind(assay_df, res[[i]]$assay_df)
-  #     barcode_df <- rbind(barcode_df, res[[i]]$barcode_df)
-  #     img_df <- rbind(img_df, res[[i]]$img_df)
-  #   }
-  # }
-  # 
-  # assay_df <- assay_df %>%
-  #   ctx$addNamespace()
-  # 
-  # barcode_df <- barcode_df %>%
-  #   ctx$addNamespace()
-  # 
-  # return(lst(assay_df, barcode_df, img_df))
+  
+  nfiles <- length(res)
+
+  assay_df <- NULL
+  barcode_df <- NULL
+  img_df <- NULL
+  for( i in seq(1, nfiles) ){
+    if( is.null( assay_df ) ){
+      assay_df <- res[[i]]$assay_df
+      barcode_df <- res[[i]]$barcode_df
+      img_df <- res[[i]]$img_df
+    }else{
+      assay_df <- rbind(assay_df, res[[i]]$assay_df)
+      barcode_df <- rbind(barcode_df, res[[i]]$barcode_df)
+      img_df <- rbind(img_df, res[[i]]$img_df)
+    }
+  }
+
+  assay_df <- assay_df %>%
+    ctx$addNamespace()
+
+  barcode_df <- barcode_df %>%
+    ctx$addNamespace()
+
+  
+  return(lst(assay_df, barcode_df, img_df))
 }
 
 do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
-  
   df_ff <- NULL
   
   data_chans <- unique(unlist(as.list(df[row_factor])))
@@ -108,7 +104,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
   }
 
   df_tmp <- NULL
-
+  
   # To demonstrate the debarcoding workflow with CATALYST, we provide sample_ff which follows
   # a 6-choose-3 barcoding scheme where mass channels 102, 104, 105, 106, 108, and 110
   # were used for labeling such that each of the 20 individual barcodes are positive for exactly
@@ -139,7 +135,8 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
 
   plot_file <- tempfile()
   png(filename=plot_file, width = 1500, height=500*np)
-  do.call("grid.arrange", c(plot_list, ncol=3))
+  #FIXME TODO Remove [1]
+  do.call("grid.arrange", c(plot_list[1], ncol=3))
   dev.off()
   plot_list <- NULL
 
