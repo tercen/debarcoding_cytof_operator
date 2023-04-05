@@ -7,7 +7,7 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   filename = tempfile()
   writeBin(ctx$client$fileService$download(docId), filename)
   sample_key <- read.csv(filename)
-  # on.exit(unlink(filename))
+  on.exit(unlink(filename))
   
   
   sk_dm <- data.matrix(sample_key[ , seq(2, ncol(sample_key))])
@@ -17,18 +17,16 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   
   rownames(sk_dm) <- sample_key[,1]
   
-  # row_df <- ctx$rselect() %>%
-  #   mutate(.ri = seq(0, ctx$rschema$nRows-1))
-  # 
-  # col_df <- ctx$cselect() %>%
-  #   mutate(.ci = seq(0, ctx$cschema$nRows-1))
+  row_df <- ctx$rselect() %>%
+    mutate(.ri = seq(0, ctx$rschema$nRows-1))
+
+  col_df <- ctx$cselect() %>%
+    mutate(.ci = seq(0, ctx$cschema$nRows-1))
   
   
   df <- ctx$select(c(".y", ".ri", ".ci")) %>%
-    left_join(( ctx$rselect() %>%
-                  mutate(.ri = seq(0, ctx$rschema$nRows-1))), by=".ri") %>%
-    left_join((ctx$cselect() %>%
-                 mutate(.ci = seq(0, ctx$cschema$nRows-1))), by=".ci") 
+    left_join(row_df, by=".ri") %>%
+    left_join(col_df, by=".ci")
   
   row_factor <- ctx$rnames[[1]] #names(row_df)
   
@@ -55,37 +53,38 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
     }
   }))
   
-  res <- df %>%
-    dplyr::group_by(filename) %>%
-    group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
-    
-
-
-  nfiles <- length(res)
-  
-  
-  assay_df <- NULL
-  barcode_df <- NULL
-  img_df <- NULL
-  for( i in seq(1, nfiles) ){
-    if( is.null( assay_df ) ){
-      assay_df <- res[[i]]$assay_df
-      barcode_df <- res[[i]]$barcode_df
-      img_df <- res[[i]]$img_df
-    }else{
-      assay_df <- rbind(assay_df, res[[i]]$assay_df)
-      barcode_df <- rbind(barcode_df, res[[i]]$barcode_df)
-      img_df <- rbind(img_df, res[[i]]$img_df)
-    }
-  }
-  
-  assay_df <- assay_df %>%
-    ctx$addNamespace()
-
-  barcode_df <- barcode_df %>%
-    ctx$addNamespace()
-  
-  return(lst(assay_df, barcode_df, img_df))
+  return(df)
+  # res <- df %>%
+  #   dplyr::group_by(filename) %>%
+  #   group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
+  #   
+  # 
+  # 
+  # nfiles <- length(res)
+  # 
+  # 
+  # assay_df <- NULL
+  # barcode_df <- NULL
+  # img_df <- NULL
+  # for( i in seq(1, nfiles) ){
+  #   if( is.null( assay_df ) ){
+  #     assay_df <- res[[i]]$assay_df
+  #     barcode_df <- res[[i]]$barcode_df
+  #     img_df <- res[[i]]$img_df
+  #   }else{
+  #     assay_df <- rbind(assay_df, res[[i]]$assay_df)
+  #     barcode_df <- rbind(barcode_df, res[[i]]$barcode_df)
+  #     img_df <- rbind(img_df, res[[i]]$img_df)
+  #   }
+  # }
+  # 
+  # assay_df <- assay_df %>%
+  #   ctx$addNamespace()
+  # 
+  # barcode_df <- barcode_df %>%
+  #   ctx$addNamespace()
+  # 
+  # return(lst(assay_df, barcode_df, img_df))
 }
 
 do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){

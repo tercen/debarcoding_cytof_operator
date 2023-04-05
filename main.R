@@ -46,24 +46,31 @@ cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 # source("op_functions.R") 
 res <- debarcoding_op(ctx, cutoff)
 
+res %>%
+  mutate(scale=.y*5) %>%
+  dplyr::select(-"variable", -"rowId", -"filename", -".y") %>%
+  ctx$addNamespace() %>%
+  as_relation() %>%
+  as_join_operator( c(), c() ) %>%
+  save_relation(ctx)
 
 # assay_df <- res[[1]]
 # barcode_df <- res[[2]]
 # img_df <- res[[3]]
 
-
-barcode_df <-  res[[2]] %>%
-  as_relation() %>%
-  left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) 
-
-
-# SAVE
-res[[1]] %>%
-  as_relation() %>%
-  left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
-  left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%
-  left_join_relation( barcode_df, ".i", ".i" ) %>%
-  left_join_relation( res[[3]], list(), list() ) %>%
-  as_join_operator( unlist(append(ctx$cnames, ctx$rnames)), unlist(append(ctx$cnames, ctx$rnames))) %>%
-  save_relation(ctx)
+# 
+# barcode_df <-  res[[2]] %>%
+#   as_relation() %>%
+#   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) 
+# 
+# 
+# # SAVE
+# res[[1]] %>%
+#   as_relation() %>%
+#   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
+#   left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%
+#   left_join_relation( barcode_df, ".i", ".i" ) %>%
+#   left_join_relation( res[[3]], list(), list() ) %>%
+#   as_join_operator( unlist(append(ctx$cnames, ctx$rnames)), unlist(append(ctx$cnames, ctx$rnames))) %>%
+#   save_relation(ctx)
 
