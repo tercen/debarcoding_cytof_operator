@@ -17,18 +17,20 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   
   rownames(sk_dm) <- sample_key[,1]
   
-  row_df <- ctx$rselect() %>%
-    mutate(.ri = seq(0, ctx$rschema$nRows-1))
-  
-  col_df <- ctx$cselect() %>%
-    mutate(.ci = seq(0, ctx$cschema$nRows-1))
+  # row_df <- ctx$rselect() %>%
+  #   mutate(.ri = seq(0, ctx$rschema$nRows-1))
+  # 
+  # col_df <- ctx$cselect() %>%
+  #   mutate(.ci = seq(0, ctx$cschema$nRows-1))
   
   
   df <- ctx$select(c(".y", ".ri", ".ci")) %>%
-    left_join(row_df, by=".ri") %>%
-    left_join(col_df, by=".ci") 
+    left_join(( ctx$rselect() %>%
+                  mutate(.ri = seq(0, ctx$rschema$nRows-1))), by=".ri") %>%
+    left_join((ctx$cselect() %>%
+                 mutate(.ci = seq(0, ctx$cschema$nRows-1))), by=".ci") 
   
-  row_factor <- names(row_df)
+  row_factor <- ctx$rnames[[1]] #names(row_df)
   
   # First row factor different from ci.
   # NOTE, only one row factor allowed
@@ -56,6 +58,7 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
   res <- df %>%
     dplyr::group_by(filename) %>%
     group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )  
+    
 
 
   nfiles <- length(res)
@@ -105,18 +108,25 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
     }
   }
 
+  df_tmp <- NULL
 
   # To demonstrate the debarcoding workflow with CATALYST, we provide sample_ff which follows
   # a 6-choose-3 barcoding scheme where mass channels 102, 104, 105, 106, 108, and 110
   # were used for labeling such that each of the 20 individual barcodes are positive for exactly
   # 3 out of the 6 barcode channels. Accompanying this, sample_key contains a binary code of
   # length 6 for each sample, e.g. 111000, as its unique identifier.
-  sample_ff <- new("flowFrame", exprs=data.matrix( df_ff ))
-  sce <- prepData(sample_ff)
+  
+    # print(sum(df_ff[,i] != 0)    )
+  
 
+  # browser()
+  sce <- new("flowFrame", exprs=data.matrix( df_ff ))
+  df_ff <- NULL
+  
+  sce <- prepData(sce)
   sce <- assignPrelim(sce, sk_dm)
   sce <- estCutoffs(sce)
-
+  
   
   pops <- rownames(sk_dm)
   np <- ceiling((length(pops)+1)/3)
@@ -132,6 +142,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
   png(filename=plot_file, width = 1500, height=500*np)
   do.call("grid.arrange", c(plot_list, ncol=3))
   dev.off()
+  plot_list <- NULL
 
 
   if( sepCuttof == -1 ){
