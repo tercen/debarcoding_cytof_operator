@@ -52,7 +52,8 @@ debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
       return(sp[length(sp)]  )
     }
   }))
-
+  
+  
   res <- df %>%
     dplyr::group_by(filename) %>%
     group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )
@@ -135,8 +136,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
 
   plot_file <- tempfile()
   png(filename=plot_file, width = 1500, height=500*np)
-  #FIXME TODO Remove [1]
-  do.call("grid.arrange", c(plot_list[1], ncol=3))
+  do.call("grid.arrange", c(plot_list, ncol=3))
   dev.off()
   plot_list <- NULL
 
