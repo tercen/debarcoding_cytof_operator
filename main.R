@@ -37,11 +37,13 @@ source("op_functions.R")
 # options("tercen.workflowId" = "4644e0c114a8edd474bc8f893a050075")
 # options("tercen.stepId"     = "a2d1a8f2-1e3a-4eec-8425-0e005dc7bbb5")
 
-# http://127.0.0.1:5400/test/w/462bec31fcad0c7eb8af65440e003fc9/ds/5f37f728-c8e4-40b1-80eb-c9956d9d9fec
-# options("tercen.workflowId" = "462bec31fcad0c7eb8af65440e003fc9")
-# options("tercen.stepId"     = "5f37f728-c8e4-40b1-80eb-c9956d9d9fec")
+# http://127.0.0.1:5400/test/w/e87260d62c621a13272407f6ff0043cb/ds/19c7f23a-79fd-4174-ae8f-3a8a2ac00754
+# options("tercen.workflowId" = "e87260d62c621a13272407f6ff0043cb")
+# options("tercen.stepId"     = "19c7f23a-79fd-4174-ae8f-3a8a2ac00754")
 
 ctx = tercenCtx()
+
+ctx$requestResources(nCpus=1, ram=16000000000, ram_per_cpu=16000000000)
 
 cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 
