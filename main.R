@@ -43,7 +43,7 @@ source("op_functions.R")
 
 ctx = tercenCtx()
 
-ctx$requestResources(nCpus=1, ram=16000000000, ram_per_cpu=16000000000)
+ctx$requestResources(nCpus=1, ram=26000000000, ram_per_cpu=26000000000)
 
 cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 
