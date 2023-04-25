@@ -16,6 +16,28 @@ suppressPackageStartupMessages({
 
 # library(profvis)
 
+# get_workflow_id <- function(ctx) {
+#   if(is.null(ctx$task)) {
+#     return(ctx$workflowId)
+#   } else {
+#     workflowIdPair <- Find(function(pair) identical(pair$key, "workflow.id"), ctx$task$environment)
+#     workflowId <- workflowIdPair$value
+#     return(workflowId)
+#   }
+# }
+# 
+# get_step_id <- function(ctx) {
+#   if(is.null(ctx$task)) {
+#     return(ctx$stepId)
+#   } else {
+#     stepIdPair <- Find(function(pair) identical(pair$key, "step.id"), ctx$task$environment)
+#     stepId <- stepIdPair$value
+#     return(stepId)
+#   }
+# }
+
+
+
 # profvis({
 source("op_functions.R") 
 # options("tercen.stepId"     = "30808f32-dbb1-4c49-9293-ccd2594aba59")
@@ -37,11 +59,28 @@ source("op_functions.R")
 # options("tercen.workflowId" = "4644e0c114a8edd474bc8f893a050075")
 # options("tercen.stepId"     = "a2d1a8f2-1e3a-4eec-8425-0e005dc7bbb5")
 
-# http://127.0.0.1:5400/test/w/e87260d62c621a13272407f6ff0043cb/ds/19c7f23a-79fd-4174-ae8f-3a8a2ac00754
-# options("tercen.workflowId" = "e87260d62c621a13272407f6ff0043cb")
-# options("tercen.stepId"     = "19c7f23a-79fd-4174-ae8f-3a8a2ac00754")
+# http://127.0.0.1:5400/test/w/462bec31fcad0c7eb8af65440e003fc9/ds/0ed730d2-e5ba-490f-b636-fe7a47ab8912
+# options("tercen.workflowId" = "462bec31fcad0c7eb8af65440e003fc9")
+# options("tercen.stepId"     = "0ed730d2-e5ba-490f-b636-fe7a47ab8912")
+
+# Multistep
+# http://127.0.0.1:5400/test/w/462bec31fcad0c7eb8af65440e003fc9/ds/acdc8625-7db7-47c1-b3fd-cb08a634b1da
+# options("tercen.workflowId" = "462bec31fcad0c7eb8af65440e003fc9")
+# options("tercen.stepId"     = "acdc8625-7db7-47c1-b3fd-cb08a634b1da")
 
 ctx = tercenCtx()
+#ctx$task$siblings$id
+# MultiStep step2
+# ctx2 = tercenCtx(workflowId = "462bec31fcad0c7eb8af65440e003fc9", stepId = "3edda5da-633d-42ab-bf20-2488e909b21e")
+
+if(is.null(ctx$task)) {
+  stop("task is null")
+} else {
+  pair <- Find(function(pair) identical(pair$key, "task.siblings.id"), ctx$task$environment)
+  task_siblings_id <- fromJSON(pair$value)
+  ctx2 <- tercenCtx(taskId = task_siblings_id)
+}
+
 
 ctx$requestResources(nCpus=1, ram=26000000000, ram_per_cpu=26000000000)
 
@@ -49,14 +88,11 @@ cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 
 # source("op_functions.R") 
 
-res <- debarcoding_op(ctx, cutoff)
+res <- debarcoding_op(ctx, ctx2, cutoff)
 
 # })
 
-
-
-
-
+# browser()
 barcode_df <-  res[[2]] %>%
   as_relation() %>%
   left_join_relation( ctx$crelation, ".i",ctx$crelation$rids )

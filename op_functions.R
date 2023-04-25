@@ -1,6 +1,6 @@
-debarcoding_op <- function( ctx, Separation_Cutoff=-1 ){
+debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
 
-  docId <- ctx$select( ctx$labels[[1]], nr = 1 ) # Assumes there is only 1 label, and they are all equal
+  docId <- ctx2$cselect(  ) # Assumes there is only 1 label, and they are all equal
   docId <- docId[[1]]
   doc <- ctx$client$fileService$get(docId)
   
