@@ -2,7 +2,7 @@ debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
 
   docId <- ctx2$cselect(  ) # Assumes there is only 1 label, and they are all equal
   docId <- docId[[1]]
-  doc <- ctx$client$fileService$get(docId)
+  doc <- ctx2$client$fileService$get(docId)
   
   filename = tempfile()
   writeBin(ctx$client$fileService$download(docId), filename)

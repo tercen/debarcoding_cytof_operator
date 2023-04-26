@@ -8,7 +8,7 @@ suppressPackageStartupMessages({
   library(openCyto)
   library(flowCore)
   
-  library(imager)
+  # library(imager)
   library(grid)
   library(gridExtra)
   library(ggplot2)
@@ -72,18 +72,19 @@ source("op_functions.R")
 ctx = tercenCtx()
 #ctx$task$siblings$id
 # MultiStep step2
+# http://127.0.0.1:5400/test/w/462bec31fcad0c7eb8af65440e003fc9/ds/3edda5da-633d-42ab-bf20-2488e909b21e
 # ctx2 = tercenCtx(workflowId = "462bec31fcad0c7eb8af65440e003fc9", stepId = "3edda5da-633d-42ab-bf20-2488e909b21e")
 
 if(is.null(ctx$task)) {
   stop("task is null")
 } else {
   pair <- Find(function(pair) identical(pair$key, "task.siblings.id"), ctx$task$environment)
-  task_siblings_id <- jsonlite::fromJSON(pair$value) 
+  task_siblings_id <- jsonlite::fromJSON(pair$value)
   ctx2 <- tercenCtx(taskId = task_siblings_id)
 }
 
 
-ctx$requestResources(nCpus=1, ram=26000000000, ram_per_cpu=26000000000)
+ctx$requestResources(nCpus=1, ram=26000000000, ram_per_cpu=0)
 
 cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
 
