@@ -78,7 +78,7 @@ if(is.null(ctx$task)) {
   stop("task is null")
 } else {
   pair <- Find(function(pair) identical(pair$key, "task.siblings.id"), ctx$task$environment)
-  task_siblings_id <- jsonlite::fromJSON(pair$value)
+  task_siblings_id <- jsonlite::fromJSON(pair$value) 
   ctx2 <- tercenCtx(taskId = task_siblings_id)
 }
 
