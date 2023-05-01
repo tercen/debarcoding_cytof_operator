@@ -1,32 +1,40 @@
 debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
-
+  # docId select ~10.5 mb difference
   docId <- ctx2$cselect(  ) # Assumes there is only 1 label, and they are all equal
   docId <- docId[[1]]
   doc <- ctx2$client$fileService$get(docId)
+
   
+  # 0.18mb difference
   filename = tempfile()
   writeBin(ctx$client$fileService$download(docId), filename)
   sample_key <- read.csv(filename)
   on.exit(unlink(filename))
+
   
-  
+  # 0.14
   sk_dm <- data.matrix(sample_key[ , seq(2, ncol(sample_key))])
   colnames(sk_dm) <- unlist(lapply( colnames(sk_dm), function(x){
-    as.numeric(substr(x, 2,nchar(x)))
-  } ))
+      as.numeric(substr(x, 2,nchar(x)))
+  } )) 
   
   rownames(sk_dm) <- sample_key[,1]
-  
+
+  # 3.55mb
   row_df <- ctx$rselect() %>%
     mutate(.ri = seq(0, ctx$rschema$nRows-1))
-
+    
   col_df <- ctx$cselect() %>%
-    mutate(.ci = seq(0, ctx$cschema$nRows-1))
+    mutate(.ci = seq(0, ctx$cschema$nRows-1))  
+
   
-  
+  # 4.92
   df <- ctx$select(c(".y", ".ri", ".ci")) %>%
     left_join(row_df, by=".ri") %>%
-    left_join(col_df, by=".ci")
+    left_join(col_df, by=".ci")  
+
+  col_df <- NULL
+  row_df <- NULL
   
   row_factor <- ctx$rnames[[1]] #names(row_df)
   
@@ -57,12 +65,16 @@ debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
   res <- df %>%
     dplyr::group_by(filename) %>%
     group_map( ~ do.debarcoding(., sk_dm, Separation_Cutoff, row_factor), .keep=TRUE )
+
+  df <- NULL
+  ctx$log("After debarcoding")
   
   nfiles <- length(res)
 
   assay_df <- NULL
   barcode_df <- NULL
   img_df <- NULL
+  
   for( i in seq(1, nfiles) ){
     if( is.null( assay_df ) ){
       assay_df <- res[[i]]$assay_df
@@ -85,48 +97,35 @@ debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
   return(lst(assay_df, barcode_df, img_df))
 }
 
+
 do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
-  df_ff <- NULL
-  
-  data_chans <- unique(unlist(as.list(df[row_factor])))
 
-  for( chan in data_chans ){
-    df_tmp <- df %>%
-      dplyr::filter( !!sym(row_factor) == chan ) %>%
-      select(.y)
+  # 0.08
+  data_chans <- unique(unlist(as.list(df[row_factor])))  
 
-    names(df_tmp) <- c(chan )
-
-    if( is.null(df_ff) ){
-      df_ff <- df_tmp
-    }else{
-      df_ff <- cbind(df_ff, df_tmp)
-    }
-  }
-
-  df_tmp <- NULL
-  
-  # To demonstrate the debarcoding workflow with CATALYST, we provide sample_ff which follows
-  # a 6-choose-3 barcoding scheme where mass channels 102, 104, 105, 106, 108, and 110
-  # were used for labeling such that each of the 20 individual barcodes are positive for exactly
-  # 3 out of the 6 barcode channels. Accompanying this, sample_key contains a binary code of
-  # length 6 for each sample, e.g. 111000, as its unique identifier.
-  
-    # print(sum(df_ff[,i] != 0)    )
+  # 1.9mb
+  dm_ff <- matrix( unlist(lapply(data_chans, function(x){
+    df %>%
+      dplyr::filter( !!sym(row_factor) == x ) %>%
+      select(.y) %>%
+      data.matrix()
+  })), ncol= length(data_chans) )   
   
 
-  # browser()
-  sce <- new("flowFrame", exprs=data.matrix( df_ff ))
-  df_ff <- NULL
   
+  colnames(dm_ff)  <- data_chans
+  
+
+  sce <- new("flowFrame", exprs=dm_ff)
+  dm_ff <- NULL
+
   sce <- prepData(sce)
   sce <- assignPrelim(sce, sk_dm)
   sce <- estCutoffs(sce)
-  
-  
+
   pops <- rownames(sk_dm)
   np <- ceiling((length(pops)+1)/3)
-  # browser()
+
   plot_list <- list()
   plot_list <- append( plot_list, list(plotYields(sce, which = c(0)) ))
   for( i in seq(1, length(pops))){
@@ -146,6 +145,8 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
   }else{
     sce <- CATALYST::applyCutoffs(sce,  sep_cutoffs = sepCuttof)
   }
+  
+  ctx$log("Apply end")
 
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   # Output 1: Scaled values per .ci and .ri
@@ -188,6 +189,7 @@ do.debarcoding <- function( df, sk_dm, sepCuttof, row_factor='variable' ){
   barcode_df <- cbind( unique(df$.ci), tibble(bc_assigns))
 
   names(barcode_df) <- append( ".i", "Barcodes")
+
 
   # END of output 2 -> barcode_df
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
