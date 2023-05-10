@@ -29,7 +29,8 @@ source("op_functions.R")
 res <- debarcoding_op(ctx, ctx2, cutoff)
 
 barcode_df <-  res[[2]] %>%
-  rename(.barcode_id = .i) %>%
+  as_tibble() %>%
+  dplyr::rename(.barcode_id = ".i") %>%
   as_relation() %>%
   left_join_relation(ctx$crelation, ".barcode_id", ctx$crelation$rids ) %>%
   as_join_operator(ctx$cnames, ctx$cnames)
