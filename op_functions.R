@@ -1,18 +1,35 @@
+library(tidyr)
+
 debarcoding_op <- function( ctx, ctx2, Separation_Cutoff=-1 ){
-  # docId select ~10.5 mb difference
-  docId <- ctx2$cselect(  ) # Assumes there is only 1 label, and they are all equal
-  docId <- docId[[1]]
-  doc <- ctx2$client$fileService$get(docId)
-
+  # 1. check for document Id
+  # If ther eis, do it like it is
+  # if not, read the table
+  isDocumentObj <- any(lapply(ctx2$cnames, function(x){
+    pts <- strsplit(x, "\\.")[[1]]
+    pts[length(pts)] == "documentId"
+  }))
+  if( isDocumentObj == T ){
+    docId <- ctx2$cselect(  ) # Assumes there is only 1 label, and they are all equal
+    docId <- docId[[1]]
+    doc <- ctx2$client$fileService$get(docId)
+    
+    filename = tempfile()
+    writeBin(ctx$client$fileService$download(docId), filename)  
+    sample_key <- read.csv(filename)
+    on.exit(unlink(filename))
+  }else{
+    fact <- ctx2$rselect()[[1]]
+    fact_name <- ctx2$rnames[[1]]
+    
+    sample_key <- ctx2$select(c(".y", ".ci", ".ri")) %>%
+      tidyr::pivot_wider(names_from = c(".ri"), values_from = ".y") %>%
+      select(-".ci") %>%
+      t() 
+      
+    sample_key <- cbind(ctx2$rselect(), sample_key)
+    colnames(sample_key) <- append('X', paste('X', ctx2$cselect()[[1]], sep = ''   ))
+  }
   
-  # 0.18mb difference
-  filename = tempfile()
-  writeBin(ctx$client$fileService$download(docId), filename)
-  sample_key <- read.csv(filename)
-  on.exit(unlink(filename))
-
-  
-  # 0.14
   sk_dm <- data.matrix(sample_key[ , seq(2, ncol(sample_key))])
   colnames(sk_dm) <- unlist(lapply( colnames(sk_dm), function(x){
       as.numeric(substr(x, 2,nchar(x)))
