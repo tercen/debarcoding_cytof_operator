@@ -7,22 +7,13 @@ suppressPackageStartupMessages({
   library(CATALYST)
   library(openCyto)
   library(flowCore)
-
-  # library(imager)
   library(grid)
   library(gridExtra)
   library(ggplot2)
   library(jsonlite)
 })
-# sudo docker build -t tercen/debarcoding_cytof_operator:latest .
-# Multistep
-# http://127.0.0.1:5402/test/w/1c63c8b5db028040a96f4122c1003436/ds/1348faa8-a1ed-41e6-93d3-561789c7fff0
-# options("tercen.workflowId" = "1c63c8b5db028040a96f4122c1003436")
-# options("tercen.stepId"     = "1348faa8-a1ed-41e6-93d3-561789c7fff0")
-
 
 ctx = tercenCtx()
-
 
 if(is.null(ctx$task)) {
   stop("task is null")
@@ -33,32 +24,23 @@ if(is.null(ctx$task)) {
   ctx2 <- tercenCtx(taskId = task_siblings_id)
 }
 
-
-# ctx$requestResources(nCpus=1, ram=26000000000, ram_per_cpu=0)
 cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
-ctx$log(ctx2$taskId)
-
 
 source("op_functions.R") 
 
 res <- debarcoding_op(ctx, ctx2, cutoff)
 
-
-scale_df <- res[[1]] %>%
-  as_relation() %>%
-  left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
-  left_join_relation( ctx$rrelation, ".r",ctx$rrelation$rids ) %>%
-  as_join_operator( unlist(append(ctx$cnames, ctx$rnames)), unlist(append(ctx$cnames, ctx$rnames))) 
-
-
 barcode_df <-  res[[2]] %>%
+  as_tibble() %>%
+  dplyr::rename(.barcode_id = ".i") %>%
   as_relation() %>%
-  left_join_relation( ctx$crelation, ".i",ctx$crelation$rids ) %>%
-  as_join_operator(ctx$cnames, ctx$cnames) #%>%
+  left_join_relation(ctx$crelation, ".barcode_id", ctx$crelation$rids ) %>%
+  as_join_operator(ctx$cnames, ctx$cnames)
 
 img_df <-  res[[3]] %>%
   as_relation() %>%
-  as_join_operator(list(), list()) #%>%
+  as_join_operator(list(), list())
   
-save_relation(list(scale_df, barcode_df, img_df), ctx)
+
+save_relation(list(barcode_df, img_df), ctx)
 

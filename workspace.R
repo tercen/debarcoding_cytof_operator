@@ -1,15 +1,57 @@
-library(tercen)
-library(dplyr, warn.conflicts = FALSE)
+suppressPackageStartupMessages({
+  library(tercen)
+  library(dplyr, warn.conflicts = FALSE)
+  library(tim)
+  library(stringr)
+  
+  library(CATALYST)
+  library(openCyto)
+  library(flowCore)
+  
+  # library(imager)
+  library(grid)
+  library(gridExtra)
+  library(ggplot2)
+  library(jsonlite)
+})
+# sudo docker build -t tercen/debarcoding_cytof_operator:latest .
+# Multistep
+# http://127.0.0.1:5402/test/w/1c63c8b5db028040a96f4122c1003436/ds/1348faa8-a1ed-41e6-93d3-561789c7fff0
+options("tercen.workflowId" = "1c63c8b5db028040a96f4122c1003436")
+options("tercen.stepId"     = "1348faa8-a1ed-41e6-93d3-561789c7fff0")
 
-# http://127.0.0.1:5402/admin/w/7537973a65f87297878b1dd4e80015bb/ds/49eff7e6-4647-4b56-8721-2e7f28888619
-options("tercen.workflowId" = "wwww")
-options("tercen.stepId"     = "dddd")
 
 ctx = tercenCtx()
 
-# ctx %>%
-#   select(.y, .ci, .ri) %>%
-#   group_by(.ci, .ri) %>%
-#   summarise(mean = mean(.y)) %>%
-#   ctx$addNamespace() %>%
-#   ctx$save()
+
+if(is.null(ctx$task)) {
+  # stop("task is null")
+  ctx2 = tercenCtx(workflowId = "1c63c8b5db028040a96f4122c1003436", stepId = "0fd72916-a3f9-4f70-bfa8-a012387353e0")
+} else {
+  pair <- Find(function(pair) identical(pair$key, "task.siblings.id"), ctx$task$environment)
+  task_siblings_id <- jsonlite::fromJSON(pair$value)
+  ctx2 <- tercenCtx(taskId = task_siblings_id)
+}
+
+cutoff <- ctx$op.value('Separation_Cutoff', as.double, -1)
+ctx$log(ctx2$taskId)
+
+
+source("op_functions.R") 
+
+res <- debarcoding_op(ctx, ctx2, cutoff)
+
+
+barcode_df <-  res[[2]] %>%
+  as_tibble() %>%
+  dplyr::rename(.barcode_id = ".i") %>%
+  as_relation() %>%
+  left_join_relation(ctx$crelation, ".barcode_id", ctx$crelation$rids ) %>%
+  as_join_operator(ctx$cnames, ctx$cnames)
+
+img_df <-  res[[3]] %>%
+  as_relation() %>%
+  as_join_operator(list(), list())
+
+
+save_relation(list(barcode_df, img_df), ctx)
