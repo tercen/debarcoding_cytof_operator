@@ -1,10 +1,17 @@
 {
   "name": "CYTOF Debarcoding",
   "description": "Debarcoding.",
-  "tags": ["data preprocessing", "cytof"],
-  "authors": ["tercen"],
-  "urls": ["https://github.com/tercen/debarcoding_cytof_operator"],
-  "container":"tercen/debarcoding_cytof_operator:latest",
+  "tags": [
+    "preprocessing",
+    "flow cytometry"
+  ],
+  "authors": [
+    "tercen"
+  ],
+  "urls": [
+    "https://github.com/tercen/debarcoding_cytof_operator"
+  ],
+  "container": "tercen/debarcoding_cytof_operator:latest",
   "properties": [
     {
       "kind": "DoubleProperty",
@@ -14,5 +21,3 @@
     }
   ]
 }
-
-
