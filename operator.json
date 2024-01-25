@@ -1,6 +1,6 @@
 {
-  "name": "CYTOF Debarcoding",
-  "description": "Debarcoding.",
+  "name": "Debarcoding",
+  "description": "Performs the debarcoding of a CyTOF experiment.",
   "tags": [
     "preprocessing",
     "flow cytometry"
