@@ -1,5 +1,5 @@
 {
-  "name": "Debarcoding",
+  "name": "CYTOF Debarcoding",
   "description": "Performs the debarcoding of a CyTOF experiment.",
   "tags": [
     "preprocessing",
@@ -19,5 +19,151 @@
       "defaultValue": -1,
       "description": "Separation cutoff use with CATALYST's apply cutoff. Leave it at -1 to use population specific cutoffs."
     }
-  ]
+  ],
+  "operatorSpec": {
+    "kind": "OperatorSpec",
+    "ontologyUri": "https://tercen.com/_ontology/tercen",
+    "ontologyVersion": "1.0.0",
+    "inputSpecs": [
+      {
+        "kind": "CrosstabSpec",
+        "metaFactors": [
+          {
+            "kind": "MetaFactor",
+            "name": "Channel",
+            "type": "",
+            "description": "CyTOF channels",
+            "ontologyMapping": "variable",
+            "crosstabMapping": "row",
+            "cardinality": "1..n",
+            "factors": []
+          },
+          {
+            "kind": "MetaFactor",
+            "name": "Observation",
+            "type": "",
+            "description": "Observations (rowId + filename)",
+            "ontologyMapping": "observation",
+            "crosstabMapping": "column",
+            "cardinality": "1..n",
+            "factors": []
+          }
+        ],
+        "axis": [
+          {
+            "kind": "AxisSpec",
+            "metaFactors": [
+              {
+                "kind": "MetaFactor",
+                "name": "Y-Axis",
+                "type": "numeric",
+                "description": "Measurement values",
+                "ontologyMapping": "measurement",
+                "crosstabMapping": "y",
+                "cardinality": "1",
+                "factors": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "CrosstabSpec",
+        "metaFactors": [
+          {
+            "kind": "MetaFactor",
+            "name": "Sample",
+            "type": "",
+            "description": "Sample/barcode identifiers",
+            "ontologyMapping": "observation",
+            "crosstabMapping": "row",
+            "cardinality": "1..n",
+            "factors": []
+          },
+          {
+            "kind": "MetaFactor",
+            "name": "Mass Channel",
+            "type": "",
+            "description": "Barcode mass channels",
+            "ontologyMapping": "variable",
+            "crosstabMapping": "column",
+            "cardinality": "1..n",
+            "factors": []
+          }
+        ],
+        "axis": [
+          {
+            "kind": "AxisSpec",
+            "metaFactors": [
+              {
+                "kind": "MetaFactor",
+                "name": "Y-Axis",
+                "type": "numeric",
+                "description": "Barcode indicator (0 or 1)",
+                "ontologyMapping": "measurement",
+                "crosstabMapping": "y",
+                "cardinality": "1",
+                "factors": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "outputSpecsV2": [
+      {
+        "kind": "OperatorJoinSpec",
+        "joinOperators": [
+          {
+            "kind": "JoinOperator",
+            "joinType": "left",
+            "leftPair": {
+              "kind": "ColumnPair",
+              "lColumns": ["Observation"],
+              "rColumns": ["Observation"]
+            },
+            "rightRelation": {
+              "kind": "TableRelation",
+              "attributes": [
+                {
+                  "kind": "Attribute",
+                  "name": "Barcodes",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "JoinOperator",
+            "joinType": "left",
+            "leftPair": {
+              "kind": "ColumnPair",
+              "lColumns": [],
+              "rColumns": []
+            },
+            "rightRelation": {
+              "kind": "TableRelation",
+              "attributes": [
+                {
+                  "kind": "Attribute",
+                  "name": "filename",
+                  "type": "string"
+                },
+                {
+                  "kind": "Attribute",
+                  "name": "mimetype",
+                  "type": "string"
+                },
+                {
+                  "kind": "Attribute",
+                  "name": ".content",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
