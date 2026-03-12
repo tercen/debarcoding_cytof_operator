@@ -56,7 +56,7 @@
               {
                 "kind": "MetaFactor",
                 "name": "Y-Axis",
-                "type": "numeric",
+                "type": "double",
                 "description": "Measurement values",
                 "ontologyMapping": "measurement",
                 "crosstabMapping": "y",
@@ -98,7 +98,7 @@
               {
                 "kind": "MetaFactor",
                 "name": "Y-Axis",
-                "type": "numeric",
+                "type": "double",
                 "description": "Barcode indicator (0 or 1)",
                 "ontologyMapping": "measurement",
                 "crosstabMapping": "y",
